@@ -281,7 +281,7 @@ def clear_history():
 def list_commands():
     print("/1 - Scan using rapid payloads")
     print("/2 - Scan using time-based payloads")
-    print("/3 - Scan with form analysis and SQL injection checks (https://github.com/daharaboi/SQLinjection_Scanner)")
+    print("/3 - Scan with form analysis and SQL injection")
     print("/4 - Scan exposed in code databases")
     print("/bugbounty - The Payload´s you need to search a Bug Bounty.")
     print("/clear - Clears the terminal")
@@ -406,7 +406,7 @@ def hackorbugbounty():
     print('\'>"><script>alert(2);</script>', "An injection showing an alert with value 2.")
 
 def credits():
-    print("Developed by @mrduck123 using ChatGPT. And special thanks to https://github.com/daharaboi/SQLinjection_Scanner thanks @daharaboi\n")
+    print("Developed by @mrduck123\n")
 
 def check_for_exposed_databases_in_code_scan_sql_injection_mode4(url):
     try:
