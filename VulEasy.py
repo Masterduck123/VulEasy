@@ -9,8 +9,8 @@ import json
 from datetime import datetime
 
 def save_scan_to_txt(url, mode, vulnerabilities):
-    appdata_path = os.getenv('APPDATA')
-    save_folder = os.path.join(appdata_path, 'VulEasy')  
+    home_path = os.path.expanduser('~')
+    save_folder = os.path.join(home_path, 'VulEasy')  
     if not os.path.exists(save_folder):
         os.makedirs(save_folder)
 
@@ -245,8 +245,8 @@ def clear():
         subprocess.run(["clear"])
 
 def show_history():
-    appdata_path = os.getenv('APPDATA')
-    save_folder = os.path.join(appdata_path, 'VulEasy')  
+    home_path = os.path.expanduser('~')
+    save_folder = os.path.join(home_path, 'VulEasy')  
     if not os.path.exists(save_folder):
         print("[INFO] No scan history found.")
         return
@@ -260,8 +260,8 @@ def show_history():
         print("[INFO] No scan history found.")
 
 def clear_history():
-    appdata_path = os.getenv('APPDATA')
-    save_folder = os.path.join(appdata_path, 'VulEasy')  
+    home_path = os.path.expanduser('~')
+    save_folder = os.path.join(home_path, 'VulEasy')  
     if not os.path.exists(save_folder):
         print("[INFO] No scan history found.")
         return
