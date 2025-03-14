@@ -9,7 +9,6 @@ Like SQL Injection, XXS etc.
 - [Installation](#installation)
 - [Usage](#usage)
 - [Contribution](#contribution)
-- [License](#license)
 
 ## Installation
 1. Clone the repository:
@@ -38,6 +37,3 @@ Contributions are welcome. Please follow these steps:
 3. Make the necessary changes and commit them (`git commit -m 'Add new feature'`).
 4. Push your changes to your forked repository (`git push origin feature/new-feature`).
 5. Create a Pull Request.
-
-## License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
