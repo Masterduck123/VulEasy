@@ -66,81 +66,57 @@ def detect(input_sequence):
         return f"Mode: {mode}, URL: {url}"
     
 def scan_sql_injection_mode1(url, payloads):
-    redirected_urls = []  
-    exposed_databases = []  
-    
+    vulnerable_urls = []
+
     for payload in payloads:
         print(f"Testing payload: {payload}")
         try:
             full_url = url + payload
-            res = requests.get(full_url, timeout=10, allow_redirects=True)  
+            res = requests.get(full_url, timeout=10)  
 
-            if res.url != full_url:
-                print(f"[VULNERABLE] Redirection detected. Original URL: {full_url} redirected to {res.url} with payload: {payload}")
-                redirected_urls.append(res.url)
-
-            if "error" in res.text.lower() and "database" in res.text.lower():
+            if res.status_code == 200 and ("error" in res.text.lower() and "database" in res.text.lower()):
                 print(f"[EXPOSED DB] Possible database exposure detected in {url} with payload: {payload}")
-                exposed_databases.append(res.url)
-                
-            elif "error" in res.text.lower() or res.status_code == 500:
+                vulnerable_urls.append(full_url)
+            elif res.status_code == 500:
                 print(f"[VULNERABLE] SQL injection vulnerability detected in {url} with payload: {payload}")
+                vulnerable_urls.append(full_url)
         except requests.exceptions.RequestException as e:
             print(f"[ERROR] Request failed: {e}")
 
-    if redirected_urls:
-        print(f"[INFO] The following SQLi payloads successfully redirected to:")
-        for redir_url in redirected_urls:
-            print(f" - {redir_url}")
+    if vulnerable_urls:
+        print(f"[INFO] The following URLs are vulnerable:")
+        for vuln_url in vulnerable_urls:
+            print(f" - {vuln_url}")
 
-    if exposed_databases:
-        print(f"[INFO] Possible exposed databases detected:")
-        for db_url in exposed_databases:
-            print(f" - {db_url}")
-    else:
-        print("[INFO] NO DATABASES EXPOSED")
-
-    return redirected_urls if redirected_urls else None
-
+    return vulnerable_urls if vulnerable_urls else None
+            
 def scan_sql_injection_mode2(url, payloads):
-    redirected_urls = []
-    exposed_databases = []  
-    
+    vulnerable_urls = []
+
     for payload in payloads:
         print(f"Testing payload: {payload}")
         start_time = time.time()
         try:
             full_url = url + payload
-            res = requests.get(full_url, timeout=10, allow_redirects=True)  
+            res = requests.get(full_url, timeout=10)  
             end_time = time.time()
             duration = end_time - start_time
-            
-            if res.url != full_url:
-                print(f"[VULNERABLE] Redirection detected. Original URL: {full_url} redirected to {res.url} with payload: {payload}")
-                redirected_urls.append(res.url)
 
-            if "error" in res.text.lower() and "database" in res.text.lower():
+            if res.status_code == 200 and ("error" in res.text.lower() and "database" in res.text.lower()):
                 print(f"[EXPOSED DB] Possible database exposure detected in {url} with payload: {payload}")
-                exposed_databases.append(res.url)
-                
-            if duration > 5:  
+                vulnerable_urls.append(full_url)
+            elif duration > 5:  
                 print(f"[VULNERABLE] Time-based SQL injection detected in {url} with payload: {payload}")
+                vulnerable_urls.append(full_url)
         except requests.exceptions.RequestException as e:
             print(f"[ERROR] Request failed: {e}")
 
-    if redirected_urls:
-        print(f"[INFO] The following SQLi payloads successfully redirected to:")
-        for redir_url in redirected_urls:
-            print(f" - {redir_url}")
+    if vulnerable_urls:
+        print(f"[INFO] The following URLs are vulnerable:")
+        for vuln_url in vulnerable_urls:
+            print(f" - {vuln_url}")
 
-    if exposed_databases:
-        print(f"[INFO] Possible exposed databases detected:")
-        for db_url in exposed_databases:
-            print(f" - {db_url}")
-    else:
-        print("[INFO] NO DATABASES EXPOSED")
-
-    return redirected_urls if redirected_urls else None
+    return vulnerable_urls if vulnerable_urls else None
 
 def scan_sql_injection_mode3(url):
     redirected_urls = []  
