@@ -240,11 +240,9 @@ def scan_sql_injection_mode3(url):
 
     return redirected_urls if redirected_urls else None
 
-def clear_terminal():
-    if platform.system() == "Windows":
-        os.system('cls')
-    else:
-        os.system('clear')
+def clear():
+    if platform.system() == "Linux":
+        subprocess.run(["clear"])
 
 def show_history():
     appdata_path = os.getenv('APPDATA')
