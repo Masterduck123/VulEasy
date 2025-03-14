@@ -322,7 +322,7 @@ def main():
         elif user_input == '/bugbounty':
             hackorbugbounty()
         elif user_input == '/clear':
-            clear_terminal()
+            clear()
         elif user_input == '/history':
             show_history()
         elif user_input == '/clearhistory':
