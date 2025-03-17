@@ -312,7 +312,7 @@ def main():
         print("## ## ## ## ##   #####    ## ##       ## #  ####")
         print("## ## ## ## ##   #----   ##---##      ##     ##")
         print("## ## ## ## #### #####  ##     ##   # ##     ##")
-        print(" ###  ##### #### ##### ##       ##   ###     ##")
+        print(" ### ##### #### ##### ##       ##   ###     ##")
         print("/1, /2, /3, or /4 to select a mode. Enter a valid URL to scan and use /list for the list of commands.\n")
 
         user_input = input("Enter your command: ")
