@@ -364,7 +364,4 @@ def main():
             print("[!] Invalid input. Enter a valid command or URL or PLEASE SELECT A MODE FIRST (/1, /2, /3, or /4)")
         
 if __name__ == "__main__":
-    main()"[!] Invalid input. Enter a valid command or URL or PLEASE SELECT A MODE FIRST (/1, /2, /3, or /4)")
-        
-if __name__ == "__main__":
     main()
