@@ -7,6 +7,11 @@ import subprocess
 import time
 import json
 from datetime import datetime
+import configparser
+
+# Cargar archivo de configuración
+config = configparser.ConfigParser()
+config.read('config.conf')
 
 def save_scan_to_txt(url, mode, vulnerabilities):
     home_path = os.path.expanduser('~')
@@ -67,14 +72,16 @@ def detect(input_sequence):
     
 def scan_sql_injection_mode1(url, payloads):
     vulnerable_urls = []
+    timeout = config.getint('general', 'request_timeout')
+    false_positive_patterns = config.get('mode1', 'false_positive_patterns').strip('[]').replace('"', '').split(',')
 
     for payload in payloads:
         print(f"Testing payload: {payload}")
         try:
             full_url = url + payload
-            res = requests.get(full_url, timeout=10)  
+            res = requests.get(full_url, timeout=timeout)  
 
-            if res.status_code == 200 and ("error" in res.text.lower() and "database" in res.text.lower()):
+            if res.status_code == 200 and any(pattern in res.text.lower() for pattern in false_positive_patterns):
                 print(f"[EXPOSED DB] Possible database exposure detected in {url} with payload: {payload}")
                 vulnerable_urls.append(full_url)
             elif res.status_code == 500:
@@ -92,20 +99,23 @@ def scan_sql_injection_mode1(url, payloads):
             
 def scan_sql_injection_mode2(url, payloads):
     vulnerable_urls = []
+    timeout = config.getint('general', 'request_timeout')
+    false_positive_patterns = config.get('mode2', 'false_positive_patterns').strip('[]').replace('"', '').split(',')
+    time_threshold = config.getint('mode2', 'time_threshold')
 
     for payload in payloads:
         print(f"Testing payload: {payload}")
         start_time = time.time()
         try:
             full_url = url + payload
-            res = requests.get(full_url, timeout=10)  
+            res = requests.get(full_url, timeout=timeout)  
             end_time = time.time()
             duration = end_time - start_time
 
-            if res.status_code == 200 and ("error" in res.text.lower() and "database" in res.text.lower()):
+            if res.status_code == 200 and any(pattern in res.text.lower() for pattern in false_positive_patterns):
                 print(f"[EXPOSED DB] Possible database exposure detected in {url} with payload: {payload}")
                 vulnerable_urls.append(full_url)
-            elif duration > 5:  
+            elif duration > time_threshold:  
                 print(f"[VULNERABLE] Time-based SQL injection detected in {url} with payload: {payload}")
                 vulnerable_urls.append(full_url)
         except requests.exceptions.RequestException as e:
@@ -121,9 +131,15 @@ def scan_sql_injection_mode2(url, payloads):
 def scan_sql_injection_mode3(url):
     redirected_urls = []  
     exposed_databases = []  
+    timeout = config.getint('general', 'request_timeout')
+    form_scan = config.getboolean('mode3', 'form_scan')
     
+    if not form_scan:
+        print("[INFO] Form scanning is disabled in configuration.")
+        return None
+
     def get_forms(url):
-        soup = BeautifulSoup(requests.get(url, timeout=10).content, "html.parser")
+        soup = BeautifulSoup(requests.get(url, timeout=timeout).content, "html.parser")
         return soup.find_all("form")
 
     def form_details(form):
@@ -178,13 +194,13 @@ def scan_sql_injection_mode3(url):
             full_url = url + action
             if details["method"] == "post":
                 try:
-                    res = requests.post(full_url, data=data, timeout=10, allow_redirects=True)  
+                    res = requests.post(full_url, data=data, timeout=timeout, allow_redirects=True)  
                 except requests.exceptions.RequestException as e:
                     print(f"[ERROR] Request failed: {e}")
                     continue  
             elif details["method"] == "get":
                 try:
-                    res = requests.get(full_url, params=data, timeout=10, allow_redirects=True)  
+                    res = requests.get(full_url, params=data, timeout=timeout, allow_redirects=True)  
                 except requests.exceptions.RequestException as e:
                     print(f"[ERROR] Request failed: {e}")
                     continue  
@@ -256,7 +272,6 @@ def list_commands():
     print("/2 - Scan using time-based payloads")
     print("/3 - Scan with form analysis and SQL injection")
     print("/4 - Scan exposed in code databases")
-    print("/bugbounty - The Payload´s you need to search a Bug Bounty.")
     print("/clear - Clears the terminal")
     print("/history - Shows the command history")
     print("/clearhistory - Clears the command history")
@@ -264,15 +279,14 @@ def list_commands():
     print("/exit - Exit for exit here ")
     print("/quit - Quit for go here")
 
-def hackorbugbounty():
-    bugbounty = "bug_bounty.txt"
-    with open(bugbounty, 'r') as file:
-        content = file.read()
-    print(content)
-    
 def check_for_exposed_databases_in_code_scan_sql_injection_mode4(url):
+    timeout = config.getint('general', 'request_timeout')
+    db_patterns = config.get('mode4', 'db_patterns').strip('[]').replace('"', '').split(',')
+    field_patterns = config.get('mode4', 'field_patterns').strip('[]').replace('"', '').split(',')
+    additional_patterns = config.get('mode4', 'additional_patterns').strip('[]').replace('"', '').split(',')
+
     try:
-        res = requests.get(url, timeout=10)
+        res = requests.get(url, timeout=timeout)
         res.raise_for_status()  
     except requests.exceptions.RequestException as e:
         print(f"[ERROR] Could not access {url}: {e}")
@@ -281,11 +295,8 @@ def check_for_exposed_databases_in_code_scan_sql_injection_mode4(url):
     content = res.text
     
     patterns = [
-        r'(mysql|postgres|mongodb|sql)[^a-zA-Z0-9]{0,5}(username|user|password|db|host|database)[^a-zA-Z0-9]{0,5}=\s*["\']?([^"\']+)',  
-        r'(db_user|db_pass|db_host|db_name)[^a-zA-Z0-9]{0,5}=\s*["\']?([^"\']+)',  
-        r'password\s*=\s*["\']?([^\s"\']+)',  
-        r'config\s*=\s*["\']?([^"\']+)',  
-        r'inurl:(?=.*admin)(?=.*database)',  
+        f'({"|".join(db_patterns)})[^a-zA-Z0-9]{{0,5}}({"|".join(field_patterns)})[^a-zA-Z0-9]{{0,5}}=\\s*["\']?([^"\']+)',
+        f'({"|".join(additional_patterns)})[^a-zA-Z0-9]{{0,5}}=\\s*["\']?([^"\']+)',
     ]
 
     exposed_data = []
@@ -319,8 +330,6 @@ def main():
 
         if user_input.lower() in ['/exit', '/quit']:
             break
-        elif user_input == '/bugbounty':
-            hackorbugbounty()
         elif user_input == '/clear':
             clear()
         elif user_input == '/history':
@@ -353,6 +362,9 @@ def main():
                 selected_mode = None
         else:
             print("[!] Invalid input. Enter a valid command or URL or PLEASE SELECT A MODE FIRST (/1, /2, /3, or /4)")
+        
+if __name__ == "__main__":
+    main()"[!] Invalid input. Enter a valid command or URL or PLEASE SELECT A MODE FIRST (/1, /2, /3, or /4)")
         
 if __name__ == "__main__":
     main()
