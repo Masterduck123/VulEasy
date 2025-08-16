@@ -6,10 +6,6 @@ from datetime import datetime
 # ---------------------- Configuration ----------------------
 MODULES = {
     "1": "sqli",
-    "2": "xss",
-    "3": "lfi",
-    "4": "rce",
-    # Add more modules here
 }
 
 SAVE_FOLDER = os.path.join(os.path.expanduser("~"), "VulEasy")
@@ -39,6 +35,7 @@ Global Commands:
   clearhistory   - Clears scan history
   list           - Lists available modules
   help           - Shows this help message
+  sqli           - Init the SQLi Scanner
 
 Usage:
   1. Type a module number or name to select it.
@@ -126,3 +123,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
