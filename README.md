@@ -9,7 +9,7 @@ VulEasy its a Python script for testing payloads with the methods of Get and Pos
 - [Usage](#usage)
 - [Contribution](#contribution)
 - [A creator comment](#comment)
-- [Update Note](#updatenote)
+- [Update Note](#update)
 
 ## Installation
 1. Clone the repository:
@@ -41,7 +41,7 @@ Contributions are welcome. Please follow these steps:
 4. Push your changes to your forked repository (`git push origin feature/new-feature`).
 5. Create a Pull Request.
 
-## Update Note
+## Update
 Update 0.0
 I add, XSS module and i change names of librarias on for example modules/sqli/__init__.py
 The old version: from .scan_modes import run
