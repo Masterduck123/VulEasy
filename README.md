@@ -9,6 +9,7 @@ VulEasy its a Python script for testing payloads with the methods of Get and Pos
 - [Usage](#usage)
 - [Contribution](#contribution)
 - [A creator comment](#comment)
+- [Update Note](#update_note)
 
 ## Installation
 1. Clone the repository:
