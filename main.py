@@ -21,6 +21,23 @@ MODULES = load_modules()
 SAVE_FOLDER = os.path.join(os.path.expanduser("~"), "VulEasy")
 history = []
 
+# ---------------------- Run Modules ---------------------- 
+def run_module(module_name):
+    try:
+        module = importlib.import_module(f"modules.{module_name}")
+
+        if hasattr(module, "run"):
+            result = module.run()
+            history.append(module_name)
+
+            if result:
+                save_scan_to_txt(module_name, result)
+        else:
+            print("[ERROR] Module has no run() function")
+
+    except Exception as e:
+        print(f"[ERROR] Failed to run module: {e}")
+
 # ---------------------- Utility Functions ----------------------
 def clear_screen():
     os.system("cls" if platform.system() == "Windows" else "clear")
@@ -49,6 +66,7 @@ Global Commands:
 [ Modules ] 
   sqli           - Run SQLi Module
   xss            - Run XSS Module
+  fingerprint    - Run Fingerprint Module
 
 Usage:
   1. Type a module number or name to select it.
@@ -75,65 +93,40 @@ def list_modules():
 
 # ---------------------- Main ----------------------
 def main():
-    print(r""" __      __    _ ______                
- \ \    / /   | |  ____|               
-  \ \  / /   _| | |__   __ _ ___ _   _ 
-   \ \/ / | | | |  __| / _` / __| | | |
-    \  /| |_| | | |___| (_| \__ \ |_| |
-     \/  \__,_|_|______\__,_|___/\__, |
-                                  __/ |
-                                 |___/ 
+    print(r"""__     ___   _ _     _____    _    ______   __
+\ \   / / | | | |   | ____|  / \  / ___\ \ / /
+ \ \ / /| | | | |   |  _|   / _ \ \___ \\ V / 
+  \ V / | |_| | |___| |___ / ___ \ ___) || |  
+   \_/   \___/|_____|_____/_/   \_\____/ |_|  
+
      Type 'help' for assistance""")
+
+    COMMANDS = {
+        "exit": lambda: exit(0),
+        "quit": lambda: exit(0),
+        "clear": clear_screen,
+        "help": show_help,
+        "history": show_history,
+        "clearhistory": clear_history,
+        "list": list_modules,
+    }
 
     while True:
         user_input = input("\nVulEasy> ").strip().lower()
 
-        # --- Global commands ---
-        if user_input in ("exit", "quit"):
-            print("Goodbye!")
-            break
-        elif user_input == "clear":
-            clear_screen()
-            continue
-        elif user_input == "help":
-            show_help()
-            continue
-        elif user_input == "history":
-            show_history()
-            continue
-        elif user_input == "clearhistory":
-            clear_history()
-            continue
-        elif user_input == "list":
-            list_modules()
+        if not user_input:
             continue
 
-        # --- Module selection ---
+        if user_input in COMMANDS:
+            COMMANDS[user_input]()
+            continue
+
         if user_input in MODULES:
             module_name = MODULES[user_input]
+            run_module(module_name)
+            continue
 
-            try:
-                scan_module = importlib.import_module(f"modules.{module_name}.{module_name}")
-            except ModuleNotFoundError:
-                print(f"[ERROR] Module '{module_name}' not found or incomplete.")
-                continue
-
-            # Try to get the run function
-            try:
-                run_func = getattr(scan_module, "run")  # Your module must have run()
-            except AttributeError:
-                print(f"[ERROR] Module '{module_name}' does not implement 'run()'.")
-                continue
-
-            print(f"[INFO] Launching {module_name.upper()} module...")
-            try:
-                # Run the module (it handles URL, GET/POST, payloads, etc.)
-                run_func()
-                history.append(f"{module_name.upper()} - executed")
-            except Exception as e:
-                print(f"[ERROR] Module execution failed: {e}")
-        else:
-            print("[ERROR] Unknown command or module. Type 'help' to see available commands.")
+        print("[ERROR] Unknown command or module. Type 'help' to see available commands.")
 
 if __name__ == "__main__":
     main()

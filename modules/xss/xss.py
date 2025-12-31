@@ -5,12 +5,12 @@ import urllib.parse
 from modules.xss.utils import load_payloads
 
 def banner():
-    print(r""" __   __ _____ _____ 
- \ \ / // ____/ ____|
-  \ V /| (___| (___  
-   > <  \___ \\___ \ 
-  / . \ ____) |___) |
- /_/ \_\_____/_____/ 
+    print(r"""__  ______ ____  
+\ \/ / ___/ ___| 
+ \  /\___ \___ \ 
+ /  \ ___) |__) |
+/_/\_\____/____/ 
+                 
                      """)
 
 def is_valid_url(url):

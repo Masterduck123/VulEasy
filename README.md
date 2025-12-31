@@ -43,11 +43,9 @@ Contributions are welcome. Please follow these steps:
 
 ## Update
 Update 0.0
-I add, XSS module and i change names of librarias on for example modules/sqli/__init__.py
-The old version: from .scan_modes import run
-Update version: from .sqli import run
+I add a fingerprint module.
 
 Thanks for reading.
 
 ## Comment
-This project will be continuously improved by adding features such as RCE, and more.
+This project will be continuously improved by adding features.
